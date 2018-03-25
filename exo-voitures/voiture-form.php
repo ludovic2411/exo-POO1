@@ -1,19 +1,23 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+///////
 require 'class-form-exo-voitures.php';
 require 'class-voitures/voiture-class-audi.php';
 require 'class-voitures/voiture-class-fiat.php';
 require 'class-voitures/voiture-class-alfa.php';
 require 'class-voitures/voiture-class-renault.php';
+require '../exo-3/validator.php';
+
 $form=new Form();
-//require 'class-voitures/voiture-class-audi.php';
-//$modele='audi';
-$selection_client=$_POST['modele'];
-if ( $_POST['modele']=="audi"){
+$validator=new Validator();
+$choix=$_POST['modele'];
+$modele=$validator->filter_string($choix);
+
+if ($modele=="audi"){
   $voiture=new Audi();
+  //echo $voiture->drive();
   if ($voiture->poids<='3,5') {
     $etat="voiture privée";
   }else {
@@ -26,21 +30,24 @@ if ( $_POST['modele']=="audi"){
   }elseif ($voiture->kilometrage>'200.000') {
     $usage="high";
   }
-  if (strpos($voiture->plaque, 'FR') ==true){
+  if (strpos($voiture->plaque, 'FR') ==false){
     $pays='France';
-  }elseif (strpos($voiture->plaque, 'BE') ==true){
+  }elseif (strpos($voiture->plaque, 'BE') ==false){
     $pays='Belgique';
   } else{
     $pays='Allemagne';
   }
-  echo '<p>"'.$voiture->modele.'"</p>';
+  //echo '<p>"'.$voiture->modele.'"</p>';
+  echo $voiture->affiche_modele();
   echo '<p>"'.$voiture->statut.'"</p>';
    $poids_voiture=$voiture->poids;
    //echo '<p>"'.$poids_voiture.'"</p>';
    echo '<p>"'.$etat.'"</p>';
+   echo $voiture->kilometrage;
    echo '<p>"'.$usage.'"</p>';
    echo '<p>"'.$pays.'"</p>';
-}elseif ($_POST['modele']=="fiat") {
+   echo $voiture->display();
+}elseif ($modele=="fiat") {
   $voiture=new Fiat();
   if ($voiture->poids<='3,5') {
     $etat="voiture privée";
@@ -61,12 +68,14 @@ if ( $_POST['modele']=="audi"){
   } else{
     $pays='Autre';
   }
-  echo '<p>"'.$voiture->modele.'"</p>';
+  //echo '<p>"'.$voiture->modele.'"</p>';
+  echo $voiture->affiche_modele();
   echo '<p>"'.$voiture->statut.'"</p>';
   echo '<p>"'.$etat.'"</p>';
   echo '<p>"'.$usage.'"</p>';
   echo '<p>"'.$pays.'"</p>';
-}elseif ($_POST['modele']=="alfa") {
+  echo $voiture->display();
+}elseif ($modele=="alfa") {
   $voiture=new Alfa();
   if ($voiture->poids<='3,5') {
     $etat="voiture privée";
@@ -87,12 +96,14 @@ if ( $_POST['modele']=="audi"){
  } else{
    $pays='Autre';
  }
-  echo '<p>"'.$voiture->modele.'"</p>';
+  //echo '<p>"'.$voiture->modele.'"</p>';
+  echo $voiture->affiche_modele();
   echo '<p>"'.$voiture->statut.'"</p>';
   echo '<p>"'.$etat.'"</p>';
   echo '<p>"'.$usage.'"</p>';
   echo '<p>"'.$pays.'"</p>';
-}elseif ($_POST['modele']=='renault') {
+  echo $voiture->display();
+}elseif ($modele=='renault') {
   $voiture=new Renault();
   if ($voiture->poids<='3,5') {
     $etat="voiture privée";
@@ -113,16 +124,14 @@ if ( $_POST['modele']=="audi"){
   } else{
     $pays='Autre';
   }
-  echo '<p>"'.$voiture->modele.'"</p>';
+  //echo '<p>"'.$voiture->modele.'"</p>';
+  echo $voiture->affiche_modele();
   echo '<p>"'.$voiture->statut.'"</p>';
   echo '<p>"'.$etat.'"</p>';
   echo '<p>"'.$usage.'"</p>';
   echo '<p>"'.$pays.'"</p>';
+  echo $voiture->display();
 }
-
-//$voiture=new Audi();
-
-//echo $voiture->affiche_modele($modele);
  ?>
  <!DOCTYPE html>
  <html lang="en" dir="ltr">
